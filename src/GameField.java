@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class GameField extends JFrame {
 //    Game field
-    private static int DIMENSION = 0;
-    private static int FULLNESS = 0;
+    private static int DIMENSION;
+    private static int FULLNESS;
 //    Cells signs
     private static final String SIGN_X = "X";
     private static final String SIGN_O = "O";
@@ -152,7 +152,7 @@ public class GameField extends JFrame {
         return false;
     }
 
-    public static boolean isGameFieldFull() {
+    private static boolean isGameFieldFull() {
         for (JButton[] curCellArray: GameField.getCells()) {
             for (JButton curBtn: curCellArray) {
                 if (curBtn.getText().equals(GameField.getSignEmpty())) {
@@ -166,17 +166,17 @@ public class GameField extends JFrame {
 
 
 //    Dialog boxes
-    public void msgCellIsNotEmpty() {
+    private void msgCellIsNotEmpty() {
         JDialog dialog = createDialog("Клетка занята!");
         dialog.setVisible(true);
     }
 
-    public void msgPlayerWon(Player player) {
+    private void msgPlayerWon(Player player) {
         JDialog dialog = createDialog(player.getName() + " победил!");
         dialog.setVisible(true);
     }
 
-    public void msgDraw() {
+    private void msgDraw() {
         JDialog dialog = createDialog("Ничья!");
         dialog.setVisible(true);
     }
@@ -228,9 +228,9 @@ public class GameField extends JFrame {
                 "SIGN_O=" + SIGN_O +
                 "SIGN_EMPTY=" + SIGN_EMPTY +
                 "DIMENSION=" + DIMENSION +
-                "DIMENSION=" + FULLNESS +
+                "FULLNESS=" + FULLNESS +
                 "CELLS=" + Arrays.toString(CELLS) +
-                "gameOver=" + gameOver +
+                "gameOver=" + this.gameOver +
                 '}';
     }
 

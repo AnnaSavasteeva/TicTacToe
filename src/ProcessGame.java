@@ -3,8 +3,8 @@ import java.util.Objects;
 
 
 public class ProcessGame extends JFrame {
-    FirstPlayer firstPlayer = new FirstPlayer("Человек");
-    AiPlayer aiPlayer = new AiPlayer("Ai");
+    Player firstPlayer = new FirstPlayer("Человек");
+    Player aiPlayer = new AiPlayer("Ai");
 
 
     public ProcessGame() {
