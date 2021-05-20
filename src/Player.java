@@ -1,5 +1,5 @@
 import javax.swing.*;
-import java.util.Objects;
+
 
 public abstract class Player {
     private final String name;
@@ -15,22 +15,26 @@ public abstract class Player {
         btn.setText(this.sign);
     }
 
+    public void turnPlayer(GameField gameField) {
+        System.out.println(this.sign);
+    }
 
-    protected boolean isWinner(String sign) {
-        if (GameField.isLineRangeFull(sign)) {
+
+    protected boolean isWinner(String sign, GameField gameField) {
+        if (gameField.isLineRangeFull(sign)) {
             return true;
         } else {
-            return GameField.isDiagonalRangeFull(sign);
+            return gameField.isDiagonalRangeFull(sign);
         }
     }
 
 
-    protected JButton getBtnWinner(String sign) {
-        for (JButton[] btnArray : GameField.getCells()) {
+    protected JButton getBtnWinner(String sign, GameField gameField) {
+        for (JButton[] btnArray : gameField.getCells()) {
             for (JButton btn : btnArray) {
-                if (GameField.isCellEmpty(btn)) {
+                if (gameField.isCellEmpty(btn)) {
                     btn.setText(sign);
-                    if (this.isWinner(sign)) {
+                    if (this.isWinner(sign, gameField)) {
                         return btn;
                     }
 
@@ -42,10 +46,10 @@ public abstract class Player {
     }
 
 
-    protected JButton getEmptyBtn() {
-        for (JButton[] btnArray : GameField.getCells()) {
+    protected JButton getEmptyBtn(GameField gameField) {
+        for (JButton[] btnArray : gameField.getCells()) {
             for (JButton btn : btnArray) {
-                if (GameField.isCellEmpty(btn)) {
+                if (gameField.isCellEmpty(btn)) {
                     return btn;
                 }
             }
@@ -63,25 +67,14 @@ public abstract class Player {
     }
 
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + "{" +
-                "name='" + name + '\'' +
-                ", sign='" + sign + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return this.getClass().getSimpleName() + "{" +
+//                "name='" + name + '\'' +
+//                ", sign='" + sign + '\'' +
+//                '}';
+//    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return Objects.equals(name, player.name) && Objects.equals(sign, player.sign);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, sign);
-    }
 
 }

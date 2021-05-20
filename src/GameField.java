@@ -1,27 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Objects;
 
 
 public class GameField extends JFrame {
 //    Game field
-    private static int DIMENSION;
-    private static int FULLNESS;
+    private final int dimension;
+    private final int fullness;
 //    Cells signs
     private static final String SIGN_X = "X";
     private static final String SIGN_O = "O";
     private static final String SIGN_EMPTY = "•";
 //    Field setup
-    private static JButton[][] CELLS;
+    private final JButton[][] cells;
     private static final Font FONT = new Font("Arial", Font.BOLD, 20);
     private boolean gameOver;
 
 
     public GameField(Player firstPlayer, Player secondPlayer, int dimension, int fullness) {
-        DIMENSION = dimension;
-        FULLNESS = fullness;
-        CELLS = new JButton[DIMENSION][DIMENSION];
+        this.dimension = dimension;
+        this.fullness = fullness;
+        this.cells = new JButton[this.dimension][this.dimension];
 
         final int gameFieldWidth = 300;
         final int gameFieldHeight = 300;
@@ -37,17 +35,17 @@ public class GameField extends JFrame {
 //        Game field panel
         JPanel gameFieldPanel = new JPanel();
         gameFieldPanel.setSize(gameFieldWidth, gameFieldHeight);
-        gameFieldPanel.setLayout(new GridLayout(DIMENSION, DIMENSION));
+        gameFieldPanel.setLayout(new GridLayout(this.dimension, this.dimension));
 //        Add buttons
-        for (int i = 0; i < CELLS.length; i++) {
-            for(int j = 0; j < CELLS[i].length; j++) {
-                CELLS[i][j] = new JButton(SIGN_EMPTY);
-                CELLS[i][j].setFont(FONT);
-                gameFieldPanel.add(CELLS[i][j]);
+        for (int i = 0; i < this.cells.length; i++) {
+            for(int j = 0; j < this.cells[i].length; j++) {
+                this.cells[i][j] = new JButton(SIGN_EMPTY);
+                this.cells[i][j].setFont(FONT);
+                gameFieldPanel.add(this.cells[i][j]);
             }
         }
 //        Add action listeners to buttons
-        for (JButton[] currentBtnArray : CELLS) {
+        for (JButton[] currentBtnArray : this.cells) {
             for (JButton currentBtn : currentBtnArray) {
                 currentBtn.addActionListener(e -> {
                     if (this.gameOver) {
@@ -55,35 +53,35 @@ public class GameField extends JFrame {
                     }
 
 //                    First player turn
-                    if (!isCellEmpty(currentBtn)) {
+                    if (!this.isCellEmpty(currentBtn)) {
                         this.msgCellIsNotEmpty();
                         return;
                     }
 
                     firstPlayer.turnPlayer(currentBtn);
 
-                    if (firstPlayer.isWinner(firstPlayer.getSign())) {
+                    if (firstPlayer.isWinner(firstPlayer.getSign(), this)) {
                         this.msgPlayerWon(firstPlayer);
-                        gameOver = true;
+                        this.gameOver = true;
                         return;
                     }
 
-                    if (GameField.isGameFieldFull()) {
+                    if (this.isGameFieldFull()) {
                         this.msgDraw();
-                        gameOver = true;
+                        this.gameOver = true;
                         return;
                     }
 
 //                    Second Player turn
-                    secondPlayer.turnPlayer(currentBtn);
-                    if (secondPlayer.isWinner(secondPlayer.getSign())) {
+                    secondPlayer.turnPlayer(this);
+                    if (secondPlayer.isWinner(secondPlayer.getSign(),this)) {
                         this.msgPlayerWon(secondPlayer);
-                        gameOver = true;
+                        this.gameOver = true;
                         return;
                     }
-                    if (GameField.isGameFieldFull()) {
+                    if (this.isGameFieldFull()) {
                         this.msgDraw();
-                        gameOver = true;
+                        this.gameOver = true;
                     }
 
                 });
@@ -95,7 +93,7 @@ public class GameField extends JFrame {
         JPanel setupPanel = new JPanel();
         JButton clearBtn = new JButton("Начать заново");
         clearBtn.addActionListener(e -> {
-            for (JButton[] btnArray : CELLS) {
+            for (JButton[] btnArray : this.cells) {
                 for(JButton btn : btnArray) {
                     btn.setText(SIGN_EMPTY);
                 }
@@ -114,20 +112,20 @@ public class GameField extends JFrame {
 
 
 //    Check cells' state
-    public static boolean isCellEmpty(JButton cell) {
+    public boolean isCellEmpty(JButton cell) {
         return cell.getText().equals(SIGN_EMPTY);
     }
 
-    public static boolean isLineRangeFull(String sign) {
-        for (int i = 0; i < DIMENSION; i++) {
+    public boolean isLineRangeFull(String sign) {
+        for (int i = 0; i < this.dimension; i++) {
             int rowSignsCounter = 0;
             int colSignsCounter = 0;
 
-            for (int j = 0; j < DIMENSION; j++) {
-                rowSignsCounter = (CELLS[i][j].getText().equals(sign)) ? rowSignsCounter + 1 : 0;
-                colSignsCounter = (CELLS[j][i].getText().equals(sign)) ? colSignsCounter + 1 : 0;
+            for (int j = 0; j < this.dimension; j++) {
+                rowSignsCounter = (this.cells[i][j].getText().equals(sign)) ? rowSignsCounter + 1 : 0;
+                colSignsCounter = (this.cells[j][i].getText().equals(sign)) ? colSignsCounter + 1 : 0;
 
-                if(rowSignsCounter == FULLNESS || colSignsCounter == FULLNESS) {
+                if(rowSignsCounter == this.fullness || colSignsCounter == this.fullness) {
                     return true;
                 }
             }
@@ -136,15 +134,15 @@ public class GameField extends JFrame {
         return false;
     }
 
-    public static boolean isDiagonalRangeFull(String sign) {
+    public boolean isDiagonalRangeFull(String sign) {
         int mainDiagonalCounter = 0;
         int addDiagonalCounter = 0;
 
-        for (int i = 0; i < DIMENSION; i++) {
-            mainDiagonalCounter = (CELLS[i][i].getText().equals(sign)) ? mainDiagonalCounter + 1 : 0;
-            addDiagonalCounter = (CELLS[i][CELLS[i].length - 1 - i].getText().equals(sign)) ? addDiagonalCounter + 1 : 0;
+        for (int i = 0; i < this.dimension; i++) {
+            mainDiagonalCounter = (this.cells[i][i].getText().equals(sign)) ? mainDiagonalCounter + 1 : 0;
+            addDiagonalCounter = (this.cells[i][this.cells[i].length - 1 - i].getText().equals(sign)) ? addDiagonalCounter + 1 : 0;
 
-            if (mainDiagonalCounter == FULLNESS || addDiagonalCounter == FULLNESS) {
+            if (mainDiagonalCounter == this.fullness || addDiagonalCounter == this.fullness) {
                 return true;
             }
         }
@@ -152,8 +150,8 @@ public class GameField extends JFrame {
         return false;
     }
 
-    private static boolean isGameFieldFull() {
-        for (JButton[] curCellArray: GameField.getCells()) {
+    private boolean isGameFieldFull() {
+        for (JButton[] curCellArray: this.cells) {
             for (JButton curBtn: curCellArray) {
                 if (curBtn.getText().equals(GameField.getSignEmpty())) {
                     return false;
@@ -202,8 +200,8 @@ public class GameField extends JFrame {
 
 
 //    Getters
-    public static JButton[][] getCells() {
-        return CELLS;
+    public JButton[][] getCells() {
+        return this.cells;
     }
 
     public static String getSignX() {
@@ -221,30 +219,6 @@ public class GameField extends JFrame {
 
 
 //    Info
-    @Override
-    public String toString() {
-        return "GameField{" +
-                "SIGN_X=" + SIGN_X +
-                "SIGN_O=" + SIGN_O +
-                "SIGN_EMPTY=" + SIGN_EMPTY +
-                "DIMENSION=" + DIMENSION +
-                "FULLNESS=" + FULLNESS +
-                "CELLS=" + Arrays.toString(CELLS) +
-                "gameOver=" + this.gameOver +
-                '}';
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GameField gameField = (GameField) o;
-        return gameOver == gameField.gameOver;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(gameOver);
-    }
 
 }

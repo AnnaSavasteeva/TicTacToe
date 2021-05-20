@@ -8,23 +8,22 @@ public class AiPlayer extends Player {
     }
 
     @Override
-    public void turnPlayer(JButton btn) {
-        JButton oWinner = this.getBtnWinner(this.getSign());
+    public void turnPlayer(GameField gameField) {
+        JButton oWinner = this.getBtnWinner(this.getSign(), gameField);
         if (oWinner != null) {
             super.turnPlayer(oWinner);
             return;
         }
 
-        JButton xWinner = this.getBtnWinner(GameField.getSignX());
+        JButton xWinner = this.getBtnWinner(GameField.getSignX(), gameField);
         if (xWinner != null) {
             super.turnPlayer(xWinner);
             return;
         }
 
-        JButton emptyBtn = this.getEmptyBtn();
+        JButton emptyBtn = this.getEmptyBtn(gameField);
         if (emptyBtn != null) {
             super.turnPlayer(emptyBtn);
         }
     }
-
 }
