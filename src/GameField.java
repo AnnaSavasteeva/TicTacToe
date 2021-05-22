@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 
 public class GameField extends JFrame {
@@ -219,6 +221,29 @@ public class GameField extends JFrame {
 
 
 //    Info
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "dimension=" + dimension +
+                ", fullness=" + fullness +
+                ", cells=" + Arrays.toString(cells) +
+                ", gameOver=" + gameOver +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GameField gameField = (GameField) o;
+        return dimension == gameField.dimension && fullness == gameField.fullness && gameOver == gameField.gameOver && Arrays.equals(cells, gameField.cells);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(dimension, fullness, gameOver);
+        result = 31 * result + Arrays.hashCode(cells);
+        return result;
+    }
 
 }

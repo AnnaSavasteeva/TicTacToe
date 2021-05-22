@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.Objects;
 
 
 public abstract class Player {
@@ -67,14 +68,25 @@ public abstract class Player {
     }
 
 
-//    @Override
-//    public String toString() {
-//        return this.getClass().getSimpleName() + "{" +
-//                "name='" + name + '\'' +
-//                ", sign='" + sign + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "name='" + name + '\'' +
+                ", sign='" + sign + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name) && Objects.equals(sign, player.sign);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, sign);
+    }
 
 }
