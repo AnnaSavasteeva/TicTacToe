@@ -12,7 +12,6 @@ public class ProcessGame extends JFrame {
         gameField.setVisible(true);
     }
 
-
     @Override
     public String toString() {
         return "ProcessGame{" +
